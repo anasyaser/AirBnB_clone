@@ -2,7 +2,9 @@
 """
 Module_name: model
 
-Create base object, it will be useful to be used as superclass
+Create base class
+it will define all common attributes/methods for other classes
+it will be useful to be used as superclass
 """
 
 import datetime as dt
@@ -34,7 +36,7 @@ class BaseModel:
         models.storage.new(self)
 
     def __from_dict(self, kwarg):
-        """create an instace from given dictionary"""
+        """create an instace from object dictionary representation"""
         for attr, value in kwarg.items():
             if attr != "__class__":
                 setattr(self, attr, value)

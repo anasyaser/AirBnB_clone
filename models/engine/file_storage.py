@@ -27,11 +27,11 @@ class FileStorage:
         return FileStorage.__objects
 
     def new(self, obj):
-        """Add new object to current objects"""
+        """Add a new object"""
         FileStorage.__objects[obj.__class__.__name__ + "." + obj.id] = obj
 
     def save(self):
-        """Save json string to file (Serializing)"""
+        """Save current objects to file (Serialization)"""
         objects_dict = {}
         for k, v in FileStorage.__objects.items():
             objects_dict[k] = v.to_dict()
@@ -39,7 +39,7 @@ class FileStorage:
             f.write(json.dumps(objects_dict))
 
     def reload(self):
-        """Load objects file and deserialize them to objects"""
+        """Load saved objects from file (deserialization)"""
         try:
             with open(FileStorage.__file_path, "r") as f:
                 objects_dict = json.loads(f.read())
