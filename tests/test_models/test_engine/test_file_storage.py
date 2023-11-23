@@ -9,6 +9,7 @@ import datetime as dt
 import models
 import sys
 import json
+import os
 
 
 class TestFileStorage(unittest.TestCase):
@@ -45,12 +46,26 @@ class TestFileStorage(unittest.TestCase):
 
     def test_save(self):
         """Test Serializing objects properly"""
-        pass
+        self.st.save()
+        self.assertTrue(os.path.exists(self.file_obj))
 
     def test_reload(self):
         """Test deserializeing objects properly"""
-        pass
+        self.st.save()
+        del_list = []
+        for key in self.objects_dict.keys():
+            del_list.append(key)
+        for key in del_list:
+            del self.objects_dict[key]
+        self.st.reload()
+        self.assertIn(self.bs1.__class__.__name__ + "." + self.bs1.id,
+                        self.objects_dict)
+        self.assertIn(self.ur1.__class__.__name__ + "." + self.ur1.id,
+                        self.objects_dict)
 
     def tearDown(self):
         """Remove testing files"""
-        pass
+        try:
+            os.remove(self.file_obj)
+        except:
+            pass
