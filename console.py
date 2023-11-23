@@ -23,11 +23,12 @@ class HBNBCommand(cmd.Cmd):
     def __init__(self, *arg, **kwarg):
         super().__init__(*arg, **kwarg)
         self.objects = storage.all()
+        self.classes = {'BaseModel': BaseModel, 'User': User, 'City': City,
+                        'Amenity': Amenity, 'Place': Place, 'State': State,
+                        'Review': Review}
 
     def __is_valid_input(self, line, no_args=1):
         """Check validation of users command arguments"""
-        valid_cls = ['BaseModel', 'User', 'City', 'Amenity', 'Place', 'State',
-                     'Review']
         args = line.split() if line else []
         msgs = [
             "** class name missing **",
@@ -43,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
                 print(msgs[i])
                 return False
             if i == 0:
-                if args[0] not in valid_cls:
+                if args[0] not in self.calsses:
                     print("** class doesn't exist **")
                     return False
             if i == 1:
@@ -56,7 +57,7 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, line):
         """Create new instance"""
         if self.__is_valid_input(line):
-            obj = eval(line)()
+            obj = self.classes[line]()
             storage.save()
             print(obj.id)
 
@@ -120,7 +121,29 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def help_quit(self):
-        print("Quit Command to exit the program\n")
+        print("Command to exit the program\n")
+
+    def help_create(self):
+        print("Command to create new instances. Usage:create <class type>\n")
+
+    def help_show(self):
+        print('Prints the string representation of an instance based on '
+              'the class name.\nUsage: show <class name> <instance id>')
+
+    def help_destroy(self):
+        print('Deletes an instance based on the class name and id.\n'
+              'Usage: destroy <class name> <instance id>')
+
+    def help_all(self):
+        print('Prints all string representation of all instances '
+              'based or not on the class name.\n'
+              'Usage: all <class name>')
+
+    def help_update(self):
+        print('Updates an instance based on the class '
+              'name and id by adding or updating attribute.\n'
+              'Usage: update <class name> <class instance> <attribute name> '
+              '<attribute value>')
 
     def do_EOF(self, line):
         """Exit the program"""
