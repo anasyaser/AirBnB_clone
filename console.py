@@ -44,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
                 print(msgs[i])
                 return False
             if i == 0:
-                if args[0] not in self.calsses:
+                if args[0] not in self.classes:
                     print("** class doesn't exist **")
                     return False
             if i == 1:
@@ -150,6 +150,11 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
+
+    def precmd(self, line):
+        print("This is precmd")
+        print(line)
+        return line
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
