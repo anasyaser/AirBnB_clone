@@ -6,6 +6,7 @@ Run AirBnB web application from console
 """
 
 import cmd
+import re
 from models import storage
 from models.base_model import BaseModel
 from models.city import City
@@ -142,7 +143,7 @@ class HBNBCommand(cmd.Cmd):
     def help_update(self):
         print('Updates an instance based on the class '
               'name and id by adding or updating attribute.\n'
-              'Usage: update <class name> <class instance> <attribute name> '
+              'Usage: update <class name> <class instance id> <attribute name> '
               '<attribute value>')
 
     def do_EOF(self, line):
@@ -150,10 +151,21 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
+    def do_count(self, line):
+        """Count number of objects of class"""
+        cnt = 0
+        for k, v in self.objects.items():
+            if line in k:
+                cnt += 1
+        print(cnt)
 
     def precmd(self, line):
-        print("This is precmd")
-        print(line)
+        if "." in line:
+            class_name = line.split(".")[0]
+            cmd = re.findall("\.([^(]+)\(", line)
+            args = re.findall(r'\("([^)]+)"\)', line)
+            print(" ".join([cmd[0], class_name, args[0].replace(",", "") if args else ""]))
+            return " ".join([cmd[0], class_name, args[0].replace(",", "") if args else ""])
         return line
 
 if __name__ == '__main__':
