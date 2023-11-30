@@ -162,10 +162,11 @@ class HBNBCommand(cmd.Cmd):
     def precmd(self, line):
         if "." in line:
             class_name = line.split(".")[0]
-            cmd = re.findall("\.([^(]+)\(", line)
+            cmd = re.findall(r'\.(.*?)\(', line)
             args = re.findall(r'\("([^)]+)"\)', line)
-            print(" ".join([cmd[0], class_name, args[0].replace(",", "") if args else ""]))
-            return " ".join([cmd[0], class_name, args[0].replace(",", "") if args else ""])
+            return " ".join([cmd[0], class_name,
+                             args[0].replace(",", "").replace('"', "")
+                             if args else ""])
         return line
 
 if __name__ == '__main__':
